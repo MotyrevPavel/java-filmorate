@@ -210,16 +210,19 @@ class UserControllerTest {
         User user = new User(10L, "valid@email", "login", "",
                 LocalDate.of(2025, 7, 26));
 
-        userController.update(user);
-        User resultUser = userController.getUsers().values().stream()
-                .findFirst().get();
+        userController.create(user);
 
-        User userWithReplacedName = new User(resultUser.getId(), "valid@email", "login", "login",
+        Long id = userController.getUsers().values().stream().findFirst().get().getId();
+        user.setId(id);
+
+        userController.update(user);
+
+        User userWithReplacedName = new User(id, "valid@email", "login", "login",
                 LocalDate.of(2025, 7, 26));
 
 
 
-        Assertions.assertEquals(userWithReplacedName, resultUser);
+        Assertions.assertEquals(userWithReplacedName, user);
     }
 
     @Test
@@ -227,16 +230,17 @@ class UserControllerTest {
         User user = new User(10L, "valid@email", "login", null,
                 LocalDate.of(2025, 7, 26));
 
-        userController.update(user);
-        User resultUser = userController.getUsers().values().stream()
-                .findFirst().get();
+        userController.create(user);
 
-        User userWithReplacedName = new User(resultUser.getId(), "valid@email", "login", "login",
+        Long id = userController.getUsers().values().stream().findFirst().get().getId();
+        user.setId(id);
+
+        userController.update(user);
+
+        User userWithReplacedName = new User(id, "valid@email", "login", "login",
                 LocalDate.of(2025, 7, 26));
 
-
-
-        Assertions.assertEquals(userWithReplacedName, resultUser);
+        Assertions.assertEquals(userWithReplacedName, user);
     }
 
     @Test
