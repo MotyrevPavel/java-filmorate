@@ -15,14 +15,14 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 public class Film {
-    Long id;
+    private Long id;
 
     @NotNull
     @NotBlank
-    String name;
-    String description;
-    LocalDate releaseDate;
-    Long duration;
+    private String name;
+    private String description;
+    private LocalDate releaseDate;
+    private Long duration;
 
     public void setDuration(Duration duration) {
         this.duration = duration.getSeconds();

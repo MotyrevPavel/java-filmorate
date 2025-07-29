@@ -7,10 +7,12 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
+import static ru.yandex.practicum.filmorate.util.Validator.*;
+
 
 @Slf4j
 @Getter
@@ -49,35 +51,6 @@ public class UserController {
     @GetMapping
     public Collection<User> getAllUsers() {
         return users.values();
-    }
-
-    private void validate(User user) {
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
-            log.error("У пользователя пустая электронная почта");
-            throw new ValidationException("Электронная почта не может быть пустой");
-        }
-        if (!user.getEmail().contains("@")) {
-            log.error("У пользователя невалидная электронная почта");
-            throw new ValidationException("Электронная почта должна содержать символ @");
-        }
-        if (user.getLogin() == null || user.getLogin().isBlank() || user.getLogin().contains(" ")) {
-            log.error("У пользователя логин пустой или содержит пробелы");
-            throw new ValidationException("Логин не может быть пустым и содержать пробелы");
-        }
-        if (user.getBirthday() == null) {
-            log.error("У пользователя дата рождения null");
-            throw new ValidationException("Дата рождения не может быть null.");
-        }
-        if (user.getBirthday().isAfter(LocalDate.now())) {
-            log.error("У пользователя неверная дата рождения");
-            throw new ValidationException("Дата рождения не может быть в будущем.");
-        }
-    }
-
-    private void checkName(User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
     }
 
     private Long generateId() {
