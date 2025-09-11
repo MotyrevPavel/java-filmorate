@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.Duration;
 import java.time.LocalDate;
+import java.util.Set;
 
 /**
  * Film.
@@ -23,8 +23,5 @@ public class Film {
     private String description;
     private LocalDate releaseDate;
     private Long duration;
-
-    public void setDuration(Duration duration) {
-        this.duration = duration.getSeconds();
-    }
+    private Set<Long> likes;
 }
