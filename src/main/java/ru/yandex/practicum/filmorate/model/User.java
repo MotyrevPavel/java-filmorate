@@ -1,30 +1,30 @@
 package ru.yandex.practicum.filmorate.model;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 /**
- * Film.
+ * User.
  */
 
 @Data
 @AllArgsConstructor
-public class Film {
+public class User {
     private Long id;
 
     @NotNull
-    @NotBlank
-    private String name;
-    private String description;
-    private LocalDate releaseDate;
-    private Long duration;
+    @Email
+    private String email;
 
-    public void setDuration(Duration duration) {
-        this.duration = duration.getSeconds();
-    }
+    @NotNull
+    @NotBlank
+    private String login;
+
+    private String name;
+    private LocalDate birthday;
 }
