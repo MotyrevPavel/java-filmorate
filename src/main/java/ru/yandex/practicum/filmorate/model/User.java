@@ -27,5 +27,28 @@ public class User {
     private String login;
     private String name;
     private LocalDate birthday;
+
+    /*@ManyToMany
+    @JoinTable(
+            name = "friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )*/
     private Set<Long> friends;
+
+    /*@ManyToMany
+    @JoinTable(
+            name = "friend_requests",
+            joinColumns = @JoinColumn(name = "sender_id"),
+            inverseJoinColumns = @JoinColumn(name = "receiver_id")
+    )*/
+    private Set<Long> sendFriendRequests;
+
+    /*@ManyToMany
+    @JoinTable(
+            name = "friend_requests",
+            joinColumns = @JoinColumn(name = "receiver_id"),
+            inverseJoinColumns = @JoinColumn(name = "sender_id")
+    )*/
+    private Set<Long> receiveFriendRequests;
 }
