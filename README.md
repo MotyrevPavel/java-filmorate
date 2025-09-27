@@ -2,7 +2,7 @@
 Template repository for Filmorate project.
 ## Моя диаграмма
 ### ER-диаграмма
-![ER-диаграмма](images/ERdiagram.svg)
+![ER-диаграмма](java-filmorate/images/ERdiagram.svg)
 
 Описание схемы и примеры запросов
 Основные сущности
@@ -10,8 +10,6 @@ Template repository for Filmorate project.
 * Фильмы
 * Друзья
 * Запросы в друзья
-  Примеры SQL-запросов
-  Получение списка друзей пользователя
 
 ### Примеры SQL-запросов
 
