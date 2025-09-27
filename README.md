@@ -2,7 +2,7 @@
 Template repository for Filmorate project.
 ## Моя диаграмма
 ### ER-диаграмма
-![ER-диаграмма](images/ERdiagram.svg)
+![ER-диаграмма](images/erdiagram.png)
 
 Описание схемы и примеры запросов
 Основные сущности
