@@ -1,30 +1,23 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.dto.film;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.dto.genre.GenreDto;
+import ru.yandex.practicum.filmorate.dto.mpa.MpaDto;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Film.
- */
-
 @Data
 @AllArgsConstructor
-public class Film {
+public class FilmDtoForGet {
     private Long id;
-
-    @NotNull
-    @NotBlank
     private String name;
     private String description;
     private LocalDate releaseDate;
     private Long duration;
     private Set<Long> likes;
-    private Mpa mpa;
-    private List<Genre> genres;
+    private MpaDto mpa;
+    private List<GenreDto> genres;
 }

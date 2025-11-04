@@ -1,0 +1,15 @@
+package ru.yandex.practicum.filmorate.dto.genre;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import ru.yandex.practicum.filmorate.model.Genre;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class GenreMapper {
+    public static GenreDto mapToGenreDto(Genre genre) {
+        return new GenreDto(
+                genre.getId(),
+                genre.getName()
+        );
+    }
+}

@@ -1,15 +1,11 @@
-package ru.yandex.practicum.filmorate.model;
+package ru.yandex.practicum.filmorate.dto.mpa;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-/**
- * Genre.
- */
-
 @Data
 @AllArgsConstructor
-public class Genre {
+public class MpaDto {
     private Long id;
     private String name;
 }

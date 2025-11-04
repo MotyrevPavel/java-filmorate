@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * Genre.
+ * Rating.
  */
 
 @Data
 @AllArgsConstructor
-public class Genre {
+public class Mpa {
     private Long id;
     private String name;
 }
