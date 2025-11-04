@@ -52,7 +52,7 @@ public class FilmDbStorageTests {
                 .hasFieldOrPropertyWithValue("description", "its the description")
                 .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1990, 5, 15))
                 .hasFieldOrPropertyWithValue("duration", 100L)
-                .hasFieldOrPropertyWithValue("mpa", new Mpa(4L, null));
+                .hasFieldOrPropertyWithValue("mpa", new Mpa(4L, "R"));
     }
 
     @Test
@@ -74,7 +74,7 @@ public class FilmDbStorageTests {
                 .hasFieldOrPropertyWithValue("description", "Film about the best people")
                 .hasFieldOrPropertyWithValue("releaseDate", LocalDate.of(1990, 5, 20))
                 .hasFieldOrPropertyWithValue("duration", 110L)
-                .hasFieldOrPropertyWithValue("mpa", new Mpa(3L, null));
+                .hasFieldOrPropertyWithValue("mpa", new Mpa(3L, "PG-13"));
     }
 
     @Test

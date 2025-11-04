@@ -66,21 +66,10 @@ public class FilmMapper {
     }
 
     public static Film updateFilmFields(Film film, UpdateFilmRequest request) {
-        if (request.hasName()) {
-            film.setName(request.getName());
-        }
-
-        if (request.hasDescription()) {
-            film.setDescription(request.getDescription());
-        }
-
-        if (request.hasReleaseDate()) {
-            film.setReleaseDate(request.getReleaseDate());
-        }
-
-        if (request.hasDuration()) {
-            film.setDuration(request.getDuration());
-        }
+        film.setName(request.getName());
+        film.setDescription(request.getDescription());
+        film.setReleaseDate(request.getReleaseDate());
+        film.setDuration(request.getDuration());
 
         if (request.hasMpa()) {
             film.setMpa(new Mpa(request.getMpa().getId(), null));

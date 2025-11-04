@@ -19,6 +19,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     private final Map<Long, Film> films = new HashMap<>();
 
     public Film create(Film film) {
+        if (film.getName() == null || film.getName().isBlank()) {
+            log.error("У фильма отсутствует название");
+            throw new ValidationException("Название не может быть пустым");
+        }
         validate(film);
         film.setId(generateId());
         films.put(film.getId(), film);
