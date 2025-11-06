@@ -24,10 +24,10 @@ public class UpdateFilmRequest {
     private List<NewGenreRequest> genres;
 
     public boolean hasMpa() {
-        return !(mpa == null);
+        return (mpa != null);
     }
 
     public boolean hasGenres() {
-        return !(genres == null || genres.isEmpty());
+        return (genres != null && !genres.isEmpty());
     }
 }

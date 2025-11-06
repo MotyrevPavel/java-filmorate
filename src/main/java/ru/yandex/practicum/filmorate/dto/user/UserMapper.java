@@ -1,12 +1,11 @@
 package ru.yandex.practicum.filmorate.dto.user;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.model.User;
 
 import java.util.HashSet;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public final class UserMapper {
     public static User mapToUser(NewUserRequest request) {
         return new User(

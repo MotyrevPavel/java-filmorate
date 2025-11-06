@@ -55,7 +55,7 @@ public class FilmService {
         return films;
     }
 
-    public FilmDtoForGet getFilm(Long id) {
+    public FilmDtoResponse getFilm(Long id) {
         log.info("Получение фильма по id: {}", id);
         Film film = filmStorage.getFilm(id);
         log.info("Фильм по id {} успешно получен", id);

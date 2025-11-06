@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.dto.film.FilmDto;
-import ru.yandex.practicum.filmorate.dto.film.FilmDtoForGet;
+import ru.yandex.practicum.filmorate.dto.film.FilmDtoResponse;
 import ru.yandex.practicum.filmorate.dto.film.NewFilmRequest;
 import ru.yandex.practicum.filmorate.dto.film.UpdateFilmRequest;
 import ru.yandex.practicum.filmorate.service.FilmService;
@@ -38,7 +38,7 @@ public class FilmController {
     }
 
     @GetMapping("/{id}")
-    public FilmDtoForGet getFilm(@PathVariable Long id) {
+    public FilmDtoResponse getFilm(@PathVariable Long id) {
         log.info("Получение фильма с id: {}", id);
         return filmService.getFilm(id);
     }

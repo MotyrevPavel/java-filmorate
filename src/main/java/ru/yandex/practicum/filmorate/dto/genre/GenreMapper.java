@@ -1,10 +1,9 @@
 package ru.yandex.practicum.filmorate.dto.genre;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.model.Genre;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class GenreMapper {
     public static GenreDto mapToGenreDto(Genre genre) {
         return new GenreDto(

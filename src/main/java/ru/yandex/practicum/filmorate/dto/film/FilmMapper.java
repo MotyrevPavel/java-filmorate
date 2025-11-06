@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.dto.film;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.dto.genre.GenreDto;
 import ru.yandex.practicum.filmorate.dto.genre.GenreMapper;
 import ru.yandex.practicum.filmorate.dto.genre.NewGenreRequest;
@@ -13,7 +12,7 @@ import ru.yandex.practicum.filmorate.model.Mpa;
 
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class FilmMapper {
     public static Film mapToFilm(NewFilmRequest request) {
         Mpa mpa = null;
@@ -86,11 +85,11 @@ public class FilmMapper {
         return film;
     }
 
-    public static FilmDtoForGet mapToFilmGetDto(Film film) {
+    public static FilmDtoResponse mapToFilmGetDto(Film film) {
         List<GenreDto> genreDtoSet = film.getGenres().stream()
                 .map(GenreMapper::mapToGenreDto)
                 .toList();
-        return new FilmDtoForGet(
+        return new FilmDtoResponse(
                 film.getId(),
                 film.getName(),
                 film.getDescription(),

@@ -1,10 +1,9 @@
 package ru.yandex.practicum.filmorate.dto.mpa;
 
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 import ru.yandex.practicum.filmorate.model.Mpa;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@UtilityClass
 public class MpaMapper {
     public static MpaDto mapToMpaDto(Mpa mpa) {
         return new MpaDto(

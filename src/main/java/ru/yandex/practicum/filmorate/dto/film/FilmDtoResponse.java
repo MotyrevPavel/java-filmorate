@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class FilmDtoForGet {
+public class FilmDtoResponse {
     private Long id;
     private String name;
     private String description;
