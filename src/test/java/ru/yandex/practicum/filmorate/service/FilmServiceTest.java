@@ -3,28 +3,34 @@ package ru.yandex.practicum.filmorate.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.dto.film.FilmDto;
+import ru.yandex.practicum.filmorate.dto.film.NewFilmRequest;
+import ru.yandex.practicum.filmorate.dto.film.UpdateFilmRequest;
+import ru.yandex.practicum.filmorate.dto.genre.NewGenreRequest;
+import ru.yandex.practicum.filmorate.dto.mpa.NewMpaRequest;
 import ru.yandex.practicum.filmorate.exception.ValidationException;
-import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.film.InMemoryFilmStorage;
-import ru.yandex.practicum.filmorate.storage.user.InMemoryUserStorage;
+import ru.yandex.practicum.filmorate.dal.ram.InMemoryFilmStorage;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.List;
 
 class FilmServiceTest {
 
     private FilmService filmService;
+    private List<NewGenreRequest> genres;
 
     @BeforeEach
     void setUp() {
-        filmService = new FilmService(new InMemoryFilmStorage(), new InMemoryUserStorage());
+        filmService = new FilmService(new InMemoryFilmStorage());
+        genres = new ArrayList<>();
     }
 
     @Test
     void shouldThrowValidationExceptionWhenCreateFilmWithNullName() {
-        Film film = new Film(10L, null, "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, null, "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.create(film));
@@ -33,8 +39,8 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenCreateFilmWithEmptyName() {
-        Film film = new Film(10L, "", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.create(film));
@@ -44,8 +50,8 @@ class FilmServiceTest {
     @Test
     void shouldThrowValidationExceptionWhenCreateFilmWithLongDescription() {
         String description = "to long description".repeat(200);
-        Film film = new Film(10L, "Name", description,
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "Name", description,
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.create(film));
@@ -54,8 +60,8 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenCreateFilmWithIncorrectReleaseDate() {
-        Film film = new Film(10L, "Name", "Description",
-                LocalDate.of(1895, 12, 27), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "Name", "Description",
+                LocalDate.of(1895, 12, 27), 10L, new NewMpaRequest(1L), genres);
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.create(film));
@@ -64,8 +70,8 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenCreateFilmWithZeroDuration() {
-        Film film = new Film(10L, "Name", "Description",
-                LocalDate.of(1895, 12, 29), 0L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "Name", "Description",
+                LocalDate.of(1895, 12, 29), 0L, new NewMpaRequest(1L), genres);
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.create(film));
@@ -75,8 +81,8 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenCreateFilmWithNegativeDuration() {
-        Film film = new Film(10L, "Name", "Description",
-                LocalDate.of(1895, 12, 29), -1L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "Name", "Description",
+                LocalDate.of(1895, 12, 29), -1L, new NewMpaRequest(1L), genres);
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.create(film));
@@ -86,24 +92,38 @@ class FilmServiceTest {
 
     @Test
     void shouldTReturnTrueWhenSuccessCreateFilm() {
-        Film film = new Film(10L, "Name", "Description",
-                LocalDate.of(1895, 12, 28), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "Name", "Description",
+                LocalDate.of(1895, 12, 28), 10L, new NewMpaRequest(1L), genres);
 
-        Film returnFilm = filmService.create(film);
+        FilmDto returnFilm = filmService.create(film);
 
-        Assertions.assertEquals(film, returnFilm);
-        Assertions.assertTrue(filmService.getAllFilms().contains(film));
+        FilmDto filmDto = new FilmDto(returnFilm.getId(), "Name", "Description",
+                LocalDate.of(1895, 12, 28), 10L, null, new NewMpaRequest(1L),
+                genres);
+
+
+        Assertions.assertEquals(filmDto, returnFilm);
+        Assertions.assertTrue(filmService.getAllFilms().contains(filmDto));
         Assertions.assertEquals(1, filmService.getAllFilms().size());
     }
 
     @Test
     void shouldThrowValidationExceptionWhenUpdateFilmWithNullName() {
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
-        Film newFilm = new Film(10L, null, "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
-        filmService.create(film);
+        FilmDto filmDto = filmService.create(film);
+
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                filmDto.getId(),
+                null,
+                "description",
+                LocalDate.of(2025, 1, 1),
+                10L,
+                new NewMpaRequest(1L),
+                genres
+        );
+
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.update(newFilm));
@@ -112,12 +132,20 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenUpdateFilmWithEmptyName() {
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
-        Film newFilm = new Film(10L, "", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
-        filmService.create(film);
+        FilmDto filmDto = filmService.create(film);
+
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                filmDto.getId(),
+                "",
+                "description",
+                LocalDate.of(2025, 1, 1),
+                10L,
+                new NewMpaRequest(1L),
+                genres
+        );
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.update(newFilm));
@@ -127,12 +155,21 @@ class FilmServiceTest {
     @Test
     void shouldThrowValidationExceptionWhenUpdateFilmWithLongDescription() {
         String description = "to long description".repeat(200);
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
-        Film newFilm = new Film(10L, "Name", description,
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
-        filmService.create(film);
+        FilmDto filmDto = filmService.create(film);
+
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                filmDto.getId(),
+                "Name",
+                description,
+                LocalDate.of(2025, 1, 1),
+                10L,
+                new NewMpaRequest(1L),
+                genres
+        );
+
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.update(newFilm));
@@ -141,12 +178,20 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenUpdateFilmWithIncorrectReleaseDate() {
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
-        Film newFilm = new Film(10L, "Name", "Description",
-                LocalDate.of(1895, 12, 27), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
-        filmService.create(film);
+        FilmDto filmDto = filmService.create(film);
+
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                filmDto.getId(),
+                "Name",
+                "Description",
+                LocalDate.of(1895, 12, 27),
+                10L,
+                new NewMpaRequest(1L),
+                genres
+        );
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.update(newFilm));
@@ -155,12 +200,20 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenUpdateFilmWithZeroDuration() {
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
-        Film newFilm = new Film(10L, "Name", "Description",
-                LocalDate.of(1895, 12, 29), 0L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
-        filmService.create(film);
+        FilmDto filmDto = filmService.create(film);
+
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                filmDto.getId(),
+                "Name",
+                "Description",
+                LocalDate.of(1895, 12, 29),
+                0L,
+                new NewMpaRequest(1L),
+                genres
+        );
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.update(newFilm));
@@ -170,12 +223,20 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenUpdateFilmWithNegativeDuration() {
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
-        Film newFilm = new Film(10L, "Name", "Description",
-                LocalDate.of(1895, 12, 29), -1L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
-        filmService.create(film);
+        FilmDto filmDto = filmService.create(film);
+
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                filmDto.getId(),
+                "Name",
+                "Description",
+                LocalDate.of(1895, 12, 29),
+                -1L,
+                new NewMpaRequest(1L),
+                genres
+        );
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.update(newFilm));
@@ -185,12 +246,20 @@ class FilmServiceTest {
 
     @Test
     void shouldThrowValidationExceptionWhenUpdateFilmWithoutId() {
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
-        Film newFilm = new Film(null, "Name", "Description",
-                LocalDate.of(1895, 12, 29), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, new NewMpaRequest(1L), genres);
 
         filmService.create(film);
+
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                null,
+                "Name",
+                "Description",
+                LocalDate.of(1895, 12, 29),
+                10L,
+                new NewMpaRequest(1L),
+                genres
+        );
 
         ValidationException exception = Assertions.assertThrows(ValidationException.class,
                 () -> filmService.update(newFilm));
@@ -200,43 +269,61 @@ class FilmServiceTest {
 
     @Test
     void shouldTReturnTrueWhenSuccessUpdateFilm() {
-        Film film = new Film(10L, "null", "description",
-                LocalDate.of(2025, 1, 1), 10L, new HashSet<>());
+        NewFilmRequest film = new NewFilmRequest(10L, "null", "description",
+                LocalDate.of(2025, 1, 1), 10L, null, genres);
 
-        filmService.create(film);
+        FilmDto filmDto = filmService.create(film);
 
-        Long id = filmService.getAllFilms().stream().findFirst().get().getId();
+        UpdateFilmRequest newFilm = new UpdateFilmRequest(
+                filmDto.getId(),
+                "Name",
+                "Description",
+                LocalDate.of(1895, 12, 28),
+                20L,
+                null,
+                genres
+        );
 
-        Film newFilm = new Film(id, "Name", "Description",
-                LocalDate.of(1895, 12, 28), 20L, new HashSet<>());
+        FilmDto newFilmDto = new FilmDto(newFilm.getId(), newFilm.getName(), newFilm.getDescription(),
+                newFilm.getReleaseDate(), newFilm.getDuration(), null, newFilm.getMpa(),
+                newFilm.getGenres());
 
+        FilmDto returnFilm = filmService.update(newFilm);
 
-        Film returnFilm = filmService.update(newFilm);
-
-        Assertions.assertEquals(newFilm, returnFilm);
-        Assertions.assertTrue(filmService.getAllFilms().contains(newFilm));
-        Assertions.assertFalse(filmService.getAllFilms().contains(film));
+        Assertions.assertEquals(newFilmDto, returnFilm);
+        Assertions.assertTrue(filmService.getAllFilms().contains(newFilmDto));
+        Assertions.assertFalse(filmService.getAllFilms().contains(filmDto));
         Assertions.assertEquals(1, filmService.getAllFilms().size());
     }
 
     @Test
     void shouldReturnTrueWhenGetAllFilms() {
-        Film film1 = new Film(10L, "film1", "description film 1",
-                LocalDate.of(1895, 12, 28), 10L, new HashSet<>());
-        Film film2 = new Film(15L, "film2", "description film 2",
-                LocalDate.of(1895, 12, 29), 20L, new HashSet<>());
-        Film film3 = new Film(20L, "film3", "description film 3",
-                LocalDate.of(1895, 12, 30), 30L, new HashSet<>());
+        NewFilmRequest film1 = new NewFilmRequest(10L, "film1", "description film 1",
+                LocalDate.of(1895, 12, 28), 10L, new NewMpaRequest(1L), genres);
+        NewFilmRequest film2 = new NewFilmRequest(15L, "film2", "description film 2",
+                LocalDate.of(1895, 12, 29), 20L, new NewMpaRequest(1L), genres);
+        NewFilmRequest film3 = new NewFilmRequest(20L, "film3", "description film 3",
+                LocalDate.of(1895, 12, 30), 30L, new NewMpaRequest(1L), genres);
 
-        filmService.create(film1);
-        filmService.create(film2);
-        filmService.create(film3);
+        FilmDto filmDto1 = filmService.create(film1);
+        FilmDto filmDto2 = filmService.create(film2);
+        FilmDto filmDto3 = filmService.create(film3);
 
-        Collection<Film> films = filmService.getAllFilms();
+        FilmDto film4 = new FilmDto(filmDto1.getId(), "film1", "description film 1",
+                LocalDate.of(1895, 12, 28), 10L, null,
+                new NewMpaRequest(1L), genres);
+        FilmDto film5 = new FilmDto(filmDto2.getId(), "film2", "description film 2",
+                LocalDate.of(1895, 12, 29), 20L, null,
+                new NewMpaRequest(1L), genres);
+        FilmDto film6 = new FilmDto(filmDto3.getId(), "film3", "description film 3",
+                LocalDate.of(1895, 12, 30), 30L, null,
+                new NewMpaRequest(1L), genres);
+
+        Collection<FilmDto> films = filmService.getAllFilms();
 
         Assertions.assertEquals(3, films.size());
-        Assertions.assertTrue(films.contains(film1));
-        Assertions.assertTrue(films.contains(film2));
-        Assertions.assertTrue(films.contains(film3));
+        Assertions.assertTrue(films.contains(film4));
+        Assertions.assertTrue(films.contains(film5));
+        Assertions.assertTrue(films.contains(film6));
     }
 }
